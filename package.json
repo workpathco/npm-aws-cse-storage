@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Helper module to encrypt and upload and download and decrypt sentitive information",
   "main": "index.js",
+  "bin": {
+    "aws-cse-storage": "./bin/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/workpathco/npm-aws-cse-storage/issues"
   },
-  "homepage": "https://github.com/workpathco/npm-aws-cse-storage#readme"
+  "homepage": "https://github.com/workpathco/npm-aws-cse-storage#readme",
+  "dependencies": {
+    "node-s3-encryption-client": "^0.1.1",
+    "read-package-json": "^2.0.13"
+  }
 }
