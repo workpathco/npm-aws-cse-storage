@@ -7,16 +7,17 @@ const downloadAndDecrypt = (key, path, bucket) => {
     Key: key, 
   };
   return s3encrypt.getObject(params, (err, fileData) => {
-    if(err){ throw err; }
-    fs.writeFile(path, fileData.Body, function (err) {
-        if (err) throw err;
-        console.log('Successfully downloaded and decrypted: %s', path);
+    if(err) throw err;
+    fs.writeFile(path, fileData.Body, (err) => {
+      if(err) throw err;
+      console.log('Successfully downloaded and decrypted: %s', path);
     });
   })
 }
 
 const encryptAndUpload = (key, path, kmsId, bucket) => {
   return fs.readFile(path, (err, stream) => {
+    if(err) throw err;
     const params = {
       Body: stream,
       Bucket: bucket,
@@ -27,7 +28,7 @@ const encryptAndUpload = (key, path, kmsId, bucket) => {
       }
     }
     return s3encrypt.putObject(params, (err, success) => {
-      if(err){ throw err; }
+      if(err) throw err;
       console.log('Successfully encrypted and uploaded: %s', path);
     })
   })

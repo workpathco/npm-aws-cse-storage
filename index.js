@@ -4,7 +4,6 @@ const factory = require('./factory.js');
 // Error helper
 const createError = message => {
   console.error(message);
-  return false;
 };
 
 readJson('package.json', console.error, false, (err, data) => {
@@ -16,11 +15,11 @@ readJson('package.json', console.error, false, (err, data) => {
 
   // Check and retrieve ksmId key in package.json config or env variable
   const kmsId = config['kms-id'] || process.env.KMS_ID;
-  if (!kmsId) return createError("`kms-id` is required in config.");
+  if (!kmsId) return createError("`kms-id` is required in config or environment variable.");
 
   // Check and retrieve bucket key in package.json config or env variable
   const bucket = config.bucket || process.env.CSE_BUCKET;
-  if (!bucket) return createError("`bucket` key is required in config.");
+  if (!bucket) return createError("`bucket` key is required in config or environment variable.");
 
   // Check and retrieve files key in package.json config
   const files = config.files;
@@ -30,11 +29,15 @@ readJson('package.json', console.error, false, (err, data) => {
   const args = process.argv.splice(2);
 
   // Act accordingly 
-  const args = process.argv.splice(2);
-  switch(args[0]) {
-    case 'upload': 
-      return Object.keys(files).forEach(key => factory.encryptAndUpload(key, files[key], kmsId, bucket)) 
-    default:
-      return Object.keys(files).forEach(key => factory.downloadAndDecrypt(key, files[key], bucket)) 
+  try{
+    const args = process.argv.splice(2);
+    switch(args[0]) {
+      case 'upload': 
+        return Object.keys(files).forEach(key => factory.encryptAndUpload(key, files[key], kmsId, bucket)) 
+      default:
+        return Object.keys(files).forEach(key => factory.downloadAndDecrypt(key, files[key], bucket)) 
+    }
+  } catch(err) {
+    createError(err.message); 
   }
 });
