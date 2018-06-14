@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/workpathco/npm-aws-cse-storage#readme",
   "dependencies": {
+    "homedir": "^0.6.0",
     "node-s3-encryption-client": "^0.1.1",
     "read-package-json": "^2.0.13"
   }
