@@ -1,6 +1,6 @@
 {
   "name": "@iggbo123/aws-cse-storage",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Helper module to encrypt/upload and download/decrypt sentitive information.",
   "keywords": "aws, encryption, s3, kms, twelve-factor, dotenv, client-side encryption, node, config",
   "main": "index.js",
