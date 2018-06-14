@@ -1,7 +1,11 @@
 const s3encrypt = require('node-s3-encryption-client');
+const homedir = require('homedir');
 const fs = require('fs');
 
 const downloadAndDecrypt = (key, path, bucket) => {
+  if(path.indexOf('~') > -1){
+    path = path.replace('~', homedir()) 
+  }
   const params = {
     Bucket: bucket, 
     Key: key, 
@@ -16,6 +20,10 @@ const downloadAndDecrypt = (key, path, bucket) => {
 }
 
 const encryptAndUpload = (key, path, kmsId, bucket) => {
+  if(path.indexOf('~') > -1){
+    path = path.replace('~', homedir()) 
+    console.log(path);
+  }
   return fs.readFile(path, (err, stream) => {
     if(err) throw err;
     const params = {
