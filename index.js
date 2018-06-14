@@ -1,34 +1,36 @@
-// Tmp
 const readJson = require('read-package-json');
 const factory = require('./factory.js');
 
-
-if(!process.env.AWS_PROFILE && !process.env.AWS_ACCESS_KEY_ID && !process.env.AWS_KEY_SECRET){
-  throw new Error("You must include your aws profile or key id and secret.");
-  return false;
-}
-
+// Error helper
 const createError = message => {
   console.error(message);
   return false;
 };
 
-readJson('package.json', console.error, false, function (err, data) {
+readJson('package.json', console.error, false, (err, data) => {
   if (err) return createError("Error finding package.json file");
+
+  // Check and retrieve package.json config
   const config = data['aws-cse-storage'];
-  if(!config){
-    console.error("Error finding `aws-cse-storage` key in your package.json")
-    return false;
-  }
+  if(!config) return createError("Error finding `aws-cse-storage` key in your package.json")
 
-  const args = process.argv.splice(2);
-
-  const kmsId = config['kms-id'];
+  // Check and retrieve ksmId key in package.json config or env variable
+  const kmsId = config['kms-id'] || process.env.KMS_ID;
   if (!kmsId) return createError("`kms-id` is required in config.");
-  const bucket = config.bucket;
+
+  // Check and retrieve bucket key in package.json config or env variable
+  const bucket = config.bucket || process.env.CSE_BUCKET;
   if (!bucket) return createError("`bucket` key is required in config.");
+
+  // Check and retrieve files key in package.json config
   const files = config.files;
   if (!files || typeof files !== 'object') return createError("`files` key is required in config and must be in object key -> value format");
+
+  // Check and retrieve command line args removing first two unneeded args 
+  const args = process.argv.splice(2);
+
+  // Act accordingly 
+  const args = process.argv.splice(2);
   switch(args[0]) {
     case 'upload': 
       return Object.keys(files).forEach(key => factory.encryptAndUpload(key, files[key], kmsId, bucket)) 
