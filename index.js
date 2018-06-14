@@ -25,11 +25,9 @@ readJson('package.json', console.error, false, (err, data) => {
   const files = config.files;
   if (!files || typeof files !== 'object') return createError("`files` key is required in config and must be in object key -> value format");
 
-  // Check and retrieve command line args removing first two unneeded args 
-  const args = process.argv.splice(2);
-
   // Act accordingly 
   try{
+    // Check and retrieve command line args removing first two unneeded args 
     const args = process.argv.splice(2);
     switch(args[0]) {
       case 'upload': 
