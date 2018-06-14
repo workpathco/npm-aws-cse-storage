@@ -25,6 +25,7 @@ or
 `aws-cse-storage upload`
 
 the kms id and bucket can be declared as environment variables as well, like so:
+
 `KMS_ID=XXXXX-XXX-XXX-XXX-XXXXX CSE_BUCKET=XXXXXXX aws-cse-storage`
  
  with only the files in the package.json
